@@ -2,83 +2,83 @@ import copy
 
 # Definir las direcciones de movimiento: (arriba, abajo, izquierda, derecha)
 directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-direction_names = ['up', 'down', 'left', 'right']
+direction_names = ['arriba', 'abajo', 'izquierda', 'derecha']
 
 # Verificar si la posición es válida
-def is_valid(x, y, matrix):
-    rows = len(matrix)
-    cols = len(matrix[0])
-    return 0 <= x < rows and 0 <= y < cols and matrix[x][y] != -1
+def es_valida(x, y, matriz):
+    filas = len(matriz)
+    columnas = len(matriz[0])
+    return 0 <= x < filas and 0 <= y < columnas y matriz[x][y] != -1
 
 # Verificar si la matriz está completamente limpia
-def is_clean(matrix):
-    for row in matrix:
-        if 1 in row:
+def esta_limpia(matriz):
+    for fila in matriz:
+        if 1 in fila:
             return False
     return True
 
 # Mostrar la matriz
-def print_matrix(matrix):
-    for row in matrix:
-        print(row)
+def mostrar_matriz(matriz):
+    for fila in matriz:
+        print(fila)
     print()
 
 # Función recursiva que simula los movimientos y genera el árbol de posibles acciones
-def dfs_all_paths(matrix, x, y, path, visited, depth=0):
+def dfs_todos_caminos(matriz, x, y, camino, visitado, profundidad=0):
     # Indentar para visualizar el árbol
-    indent = "    " * depth
+    indentacion = "    " * profundidad
 
     # Si encontramos una solución (toda la matriz está limpia)
-    if is_clean(matrix):
-        print(indent + f"Solution found at depth {depth} with path: {path} (Cost: {depth})")
-        print_matrix(matrix)
+    if esta_limpia(matriz):
+        print(indentacion + f"Solución encontrada en profundidad {profundidad} con camino: {camino} (Costo: {profundidad})")
+        mostrar_matriz(matriz)
         return True
 
     # Marcar la posición actual como visitada
-    visited.add((x, y))
+    visitado.add((x, y))
 
     # Probar todos los posibles movimientos y mostrar el árbol
-    found_solution = False
-    print(indent + f"At position ({x}, {y}) with path: {path}")
+    solucion_encontrada = False
+    print(indentacion + f"En posición ({x}, {y}) con camino: {camino}")
     
     for i, (dx, dy) in enumerate(directions):
-        new_x, new_y = x + dx, y + dy
+        nuevo_x, nuevo_y = x + dx, y + dy
         
-        if is_valid(new_x, new_y, matrix):
+        if es_valida(nuevo_x, nuevo_y, matriz):
             # Crear una copia de la matriz para el nuevo estado
-            new_matrix = copy.deepcopy(matrix)
+            nueva_matriz = copy.deepcopy(matriz)
             # Limpiar la celda si está sucia
-            if new_matrix[new_x][new_y] == 1:
-                new_matrix[new_x][new_y] = 0
+            if nueva_matriz[nuevo_x][nuevo_y] == 1:
+                nueva_matriz[nuevo_x][nuevo_y] = 0
             
-            print(indent + f"-> Child: Moving {direction_names[i]} to ({new_x}, {new_y})")
-            print_matrix(new_matrix)
+            print(indentacion + f"-> Hijo: Moviéndose {direction_names[i]} a ({nuevo_x}, {nuevo_y})")
+            mostrar_matriz(nueva_matriz)
             
             # Si no hemos visitado la nueva celda, explorarla
-            if (new_x, new_y) not in visited:
+            if (nuevo_x, nuevo_y) no está en visitado:
                 # Recursión hacia el siguiente nivel del árbol
-                if dfs_all_paths(new_matrix, new_x, new_y, path + [direction_names[i]], visited, depth + 1):
-                    found_solution = True
+                if dfs_todos_caminos(nueva_matriz, nuevo_x, nuevo_y, camino + [direction_names[i]], visitado, profundidad + 1):
+                    solucion_encontrada = True
     
     # Deshacer la visita cuando retrocedamos en la búsqueda
-    visited.remove((x, y))
+    visitado.remove((x, y))
     
-    return found_solution
+    return solucion_encontrada
 
 # Matriz de ejemplo: 0 limpio, 1 sucio, -1 bloqueado
-matrix = [
+matriz = [
     [0, 1, 1],
     [1, -1, 1],
     [1, 1, 0]
 ]
 
 # Posición inicial del robot
-start_x, start_y = 0, 0
+inicio_x, inicio_y = 0, 0
 
 # Mostrar el estado inicial
-print("Initial matrix:")
-print_matrix(matrix)
+print("Matriz inicial:")
+mostrar_matriz(matriz)
 
 # Ejecutar DFS para encontrar una solución mostrando todo el árbol
-visited = set()
-dfs_all_paths(matrix, start_x, start_y, [], visited)
+visitado = set()
+dfs_todos_caminos(matriz, inicio_x, inicio_y, [], visitado)

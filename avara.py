@@ -2,107 +2,107 @@ import copy
 
 # Definir las direcciones de movimiento: (arriba, abajo, izquierda, derecha)
 directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-direction_names = ['up', 'down', 'left', 'right']
+direction_names = ['arriba', 'abajo', 'izquierda', 'derecha']
 
 # Verificar si la posición es válida
-def is_valid(x, y, matrix):
-    rows = len(matrix)
-    cols = len(matrix[0])
-    return 0 <= x < rows and 0 <= y < cols and matrix[x][y] != -1
+def es_valida(x, y, matriz):
+    filas = len(matriz)
+    columnas = len(matriz[0])
+    return 0 <= x < filas and 0 <= y < columnas and matriz[x][y] != -1
 
 # Verificar si la matriz está completamente limpia
-def is_clean(matrix):
-    for row in matrix:
-        if 1 in row:
+def esta_limpia(matriz):
+    for fila in matriz:
+        if 1 in fila:
             return False
     return True
 
 # Mostrar la matriz
-def print_matrix(matrix):
-    for row in matrix:
-        print(row)
+def mostrar_matriz(matriz):
+    for fila in matriz:
+        print(fila)
     print()
 
 # Calcular la distancia Manhattan
-def manhattan_distance(x1, y1, x2, y2):
+def distancia_manhattan(x1, y1, x2, y2):
     return abs(x1 - x2) + abs(y1 - y2)
 
 # Función que implementa el algoritmo Avara
-def greedy_clean(matrix, start_x, start_y):
+def limpiar_greedy(matriz, start_x, start_y):
     # Crear una lista para las posiciones sucias
-    dirty_positions = [(i, j) for i in range(len(matrix)) for j in range(len(matrix[0])) if matrix[i][j] == 1]
+    posiciones_sucias = [(i, j) for i in range(len(matriz)) for j in range(len(matriz[0])) if matriz[i][j] == 1]
     
     # Inicializar el camino y la posición actual
-    current_x, current_y = start_x, start_y
-    path = []
+    x_actual, y_actual = start_x, start_y
+    camino = []
 
-    while dirty_positions:
+    while posiciones_sucias:
         # Encontrar la celda sucia más cercana
-        nearest_dirty = None
-        nearest_distance = float('inf')
+        mas_cercano = None
+        distancia_mas_cercana = float('inf')
 
-        for (dx, dy) in dirty_positions:
-            distance = manhattan_distance(current_x, current_y, dx, dy)
-            if distance < nearest_distance:
-                nearest_distance = distance
-                nearest_dirty = (dx, dy)
+        for (dx, dy) in posiciones_sucias:
+            distancia = distancia_manhattan(x_actual, y_actual, dx, dy)
+            if distancia < distancia_mas_cercana:
+                distancia_mas_cercana = distancia
+                mas_cercano = (dx, dy)
 
         # Moverse a la celda más cercana
-        if nearest_dirty:
-            target_x, target_y = nearest_dirty
+        if mas_cercano:
+            x_destino, y_destino = mas_cercano
             
-            while (current_x, current_y) != (target_x, target_y):
+            while (x_actual, y_actual) != (x_destino, y_destino):
                 # Determinar la dirección del movimiento
-                if current_x < target_x:
-                    next_x, next_y = current_x + 1, current_y
-                    move = 'down'
-                elif current_x > target_x:
-                    next_x, next_y = current_x - 1, current_y
-                    move = 'up'
-                elif current_y < target_y:
-                    next_x, next_y = current_x, current_y + 1
-                    move = 'right'
+                if x_actual < x_destino:
+                    siguiente_x, siguiente_y = x_actual + 1, y_actual
+                    movimiento = 'abajo'
+                elif x_actual > x_destino:
+                    siguiente_x, siguiente_y = x_actual - 1, y_actual
+                    movimiento = 'arriba'
+                elif y_actual < y_destino:
+                    siguiente_x, siguiente_y = x_actual, y_actual + 1
+                    movimiento = 'derecha'
                 else:
-                    next_x, next_y = current_x, current_y - 1
-                    move = 'left'
+                    siguiente_x, siguiente_y = x_actual, y_actual - 1
+                    movimiento = 'izquierda'
 
                 # Mover a la nueva posición
-                if is_valid(next_x, next_y, matrix):
-                    current_x, current_y = next_x, next_y
-                    path.append(move)
+                if es_valida(siguiente_x, siguiente_y, matriz):
+                    x_actual, y_actual = siguiente_x, siguiente_y
+                    camino.append(movimiento)
 
                     # Limpiar la celda si está sucia
-                    if matrix[current_x][current_y] == 1:
-                        matrix[current_x][current_y] = 0
-                        print(f"Cleaned position ({current_x}, {current_y})")
+                    if matriz[x_actual][y_actual] == 1:
+                        matriz[x_actual][y_actual] = 0
+                        print(f"Limpió la posición ({x_actual}, {y_actual})")
                     
-                    print(f"Moved {move} to ({current_x}, {current_y})")
-                    print_matrix(matrix)
+                    print(f"Se movió {movimiento} a ({x_actual}, {y_actual})")
+                    mostrar_matriz(matriz)
 
                 else:
-                    print(f"Cannot move {move} to ({next_x}, {next_y}) - position is blocked or invalid")
+                    print(f"No se puede mover {movimiento} a ({siguiente_x}, {siguiente_y}) - posición bloqueada o inválida")
                     break
 
             # Remover la celda sucia limpiada de la lista
-            if nearest_dirty in dirty_positions:
-                dirty_positions.remove(nearest_dirty)
+            if mas_cercano in posiciones_sucias:
+                posiciones_sucias.remove(mas_cercano)
 
-    print("All positions cleaned!")
-    print(f"Path taken: {path}")
+    print("¡Todas las posiciones fueron limpiadas!")
+    print(f"Camino recorrido: {camino}")
 
 # Matriz de ejemplo: 0 limpio, 1 sucio, -1 bloqueado
-matrix = [
+matriz = [
     [0, 1, 1],
     [1, -1, 1],
     [1, 1, 0]
 ]
 
 # Posición inicial del robot
-start_x, start_y = 0, 0
+inicio_x, inicio_y = 0, 0
 
 # Mostrar el estado inicial
-print("Initial matrix:")
-print_matrix(matrix)
+print("Matriz inicial:")
+mostrar_matriz(matriz)
 
 # Ejecutar el algoritmo Avara para limpiar la matriz
-greedy_clean(matrix, start_x, start_y)
+limpiar_greedy(matriz, inicio_x, inicio_y)
