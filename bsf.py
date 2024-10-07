@@ -30,7 +30,7 @@ def dfs_all_paths(matrix, x, y, path, visited, depth=0):
 
     # Si encontramos una solución (toda la matriz está limpia)
     if is_clean(matrix):
-        print(indent + f"Solution found at depth {depth} with path: {path}")
+        print(indent + f"Solution found at depth {depth} with path: {path} (Cost: {depth})")
         print_matrix(matrix)
         return True
 
