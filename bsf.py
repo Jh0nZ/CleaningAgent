@@ -8,7 +8,7 @@ direction_names = ['arriba', 'abajo', 'izquierda', 'derecha']
 def es_valida(x, y, matriz):
     filas = len(matriz)
     columnas = len(matriz[0])
-    return 0 <= x < filas and 0 <= y < columnas y matriz[x][y] != -1
+    return 0 <= x < filas and 0 <= y < columnas and matriz[x][y] != -1
 
 # Verificar si la matriz está completamente limpia
 def esta_limpia(matriz):
@@ -30,7 +30,7 @@ def dfs_todos_caminos(matriz, x, y, camino, visitado, profundidad=0):
 
     # Si encontramos una solución (toda la matriz está limpia)
     if esta_limpia(matriz):
-        print(indentacion + f"Solución encontrada en profundidad {profundidad} con camino: {camino} (Costo: {profundidad})")
+        print(indentacion + f"Solucion encontrada en profundidad {profundidad} con camino: {camino} (Costo: {profundidad})")
         mostrar_matriz(matriz)
         return True
 
@@ -39,7 +39,7 @@ def dfs_todos_caminos(matriz, x, y, camino, visitado, profundidad=0):
 
     # Probar todos los posibles movimientos y mostrar el árbol
     solucion_encontrada = False
-    print(indentacion + f"En posición ({x}, {y}) con camino: {camino}")
+    print(indentacion + f"En posicion ({x}, {y}) con camino: {camino}")
     
     for i, (dx, dy) in enumerate(directions):
         nuevo_x, nuevo_y = x + dx, y + dy
@@ -51,11 +51,11 @@ def dfs_todos_caminos(matriz, x, y, camino, visitado, profundidad=0):
             if nueva_matriz[nuevo_x][nuevo_y] == 1:
                 nueva_matriz[nuevo_x][nuevo_y] = 0
             
-            print(indentacion + f"-> Hijo: Moviéndose {direction_names[i]} a ({nuevo_x}, {nuevo_y})")
+            print(indentacion + f"-> Hijo: Moviendose {direction_names[i]} a ({nuevo_x}, {nuevo_y})")
             mostrar_matriz(nueva_matriz)
             
             # Si no hemos visitado la nueva celda, explorarla
-            if (nuevo_x, nuevo_y) no está en visitado:
+            if (nuevo_x, nuevo_y) not in visitado:
                 # Recursión hacia el siguiente nivel del árbol
                 if dfs_todos_caminos(nueva_matriz, nuevo_x, nuevo_y, camino + [direction_names[i]], visitado, profundidad + 1):
                     solucion_encontrada = True

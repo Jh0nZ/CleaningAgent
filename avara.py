@@ -74,13 +74,13 @@ def limpiar_greedy(matriz, start_x, start_y):
                     # Limpiar la celda si está sucia
                     if matriz[x_actual][y_actual] == 1:
                         matriz[x_actual][y_actual] = 0
-                        print(f"Limpió la posición ({x_actual}, {y_actual})")
+                        print(f"Limpio la posicion ({x_actual}, {y_actual})")
                     
-                    print(f"Se movió {movimiento} a ({x_actual}, {y_actual})")
+                    print(f"Se movio {movimiento} a ({x_actual}, {y_actual})")
                     mostrar_matriz(matriz)
 
                 else:
-                    print(f"No se puede mover {movimiento} a ({siguiente_x}, {siguiente_y}) - posición bloqueada o inválida")
+                    print(f"No se puede mover {movimiento} a ({siguiente_x}, {siguiente_y}) - posicion bloqueada o invalida")
                     break
 
             # Remover la celda sucia limpiada de la lista
